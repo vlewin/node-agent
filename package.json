@@ -1,0 +1,29 @@
+{
+  "name": "agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": {
+    "agent": "./index.js"
+  },
+  "scripts": {
+    "package": "npx pkg . --targets node12-macos-x64 --out-path bin",
+    "package:linux": "npx pkg . --targets node12-linux-x64 --out-path bin",
+    "package:windows": "npx pkg . --targets node12-win-x64 --out-path bin",
+    "package:all": "npx pkg . -t node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path bin"
+  },
+  "dependencies": {
+    "pkg": "^4.4.9"
+  },
+  "devDependencies": {
+    "glob": "^7.1.5",
+    "systeminformation": "^4.27.3"
+  },
+  "pkg": {
+    "scripts": "plugins/**/*.js",
+    "assets": "plugins/**/*.js",
+    "targets": [
+      "node12"
+    ]
+  }
+}
