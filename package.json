@@ -4,24 +4,27 @@
   "main": "index.js",
   "license": "MIT",
   "bin": {
-    "agent": "./index.js"
+    "agent": "./src/index.js"
   },
   "scripts": {
-    "package": "npx pkg . --targets node12-macos-x64 --out-path bin",
-    "package:linux": "npx pkg . --targets node12-linux-x64 --out-path bin",
-    "package:windows": "npx pkg . --targets node12-win-x64 --out-path bin",
-    "package:all": "npx pkg . -t node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path bin"
+    "deploy": "sls deploy",
+    "deploy:function": "sls deploy -f package",
+    "package": "npx pkg package.json --targets node12-macos-x64 --out-path bin",
+    "package:linux": "npx pkg package.json --targets node12-linux-x64 --out-path bin",
+    "package:windows": "npx pkg package.json --targets node12-win-x64 --out-path bin",
+    "package:all": "npx pkg package.json -t node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path bin"
   },
   "dependencies": {
-    "pkg": "^4.4.9"
-  },
-  "devDependencies": {
-    "glob": "^7.1.5",
+    "pkg": "^4.4.9",
     "systeminformation": "^4.27.3"
   },
+  "devDependencies": {
+    "aws-sdk": "^2.749.0",
+    "glob": "^7.1.5"
+  },
   "pkg": {
-    "scripts": "plugins/**/*.js",
-    "assets": "plugins/**/*.js",
+    "scripts": "./src/plugins/**/*.js",
+    "assets": "./src/plugins/**/*.js",
     "targets": [
       "node12"
     ]

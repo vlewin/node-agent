@@ -1,0 +1,8 @@
+{
+    "interval": 60000,
+    "attributes": [
+        "total",
+        "free",
+        "used"
+    ]
+}

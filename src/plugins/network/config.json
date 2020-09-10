@@ -1,0 +1,8 @@
+{
+    "interval": 60000,
+    "attributes": [
+        "iface",
+        "rx_bytes",
+        "tx_bytes"
+    ]
+}

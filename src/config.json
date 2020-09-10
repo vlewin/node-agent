@@ -1,0 +1,13 @@
+{
+  "id": "uuid",
+  "runtime": {
+    "interval": 10000,
+    "endpoint": "https://apigateway.de/agents/"
+  },
+  "plugins": [
+    "battery",
+    "system",
+    "network",
+    "memory"
+  ]
+}

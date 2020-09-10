@@ -1,0 +1,8 @@
+{
+    "interval": 5000,
+    "attributes": [
+        "uuid",
+        "manufacturer",
+        "model"
+    ]
+}

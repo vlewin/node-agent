@@ -1,0 +1,44 @@
+service: node-agent-packager
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: eu-central-1
+  stage: "${opt:stage, 'development'}"
+  timeout: 240
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+        - s3:PutObject
+      Resource: arn:aws:s3:::vlewin-node-packager/*
+
+  environment:
+    PKG_CACHE_PATH: /tmp
+    PKG_TARGET_PATH: /tmp
+
+functions:
+  package:
+    handler: serverless_packager.handler
+    # events:
+    #   - http:
+    #       path: package
+    #       method: get
+    #       cors: true
+
+# FIXME: Create a bucket for executables
+# resources:
+#   Outputs:
+#     Test:
+#       test-output
+#     ServiceEndpoint:
+#       Description: API Gateway endpoint
+#       Value:
+#         Fn::Join:
+#           - ""
+#           - - "https://"
+#             - "Ref": "ApiGatewayRestApi"
+#             - ".execute-api.eu-west-1.amazonaws.com/dev"
+
+# plugins:
+#   - serverless-stack-output
