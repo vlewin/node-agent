@@ -1,0 +1,44 @@
+{
+  "$id": "https://example.com/person.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent config",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique agent identifier e.g. uuid",
+      "default": "test"
+    },
+    "runtime": {
+      "type": "object",
+      "description": "Agent runtime configuration options",
+      "properties": {
+        "interval": {
+          "type": "number",
+          "description": "API sync request frequency in ms",
+          "default": 10000
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Sync API endpoint",
+          "default": "https://example.com"
+        },
+        "key": {
+          "type": "string",
+          "description": "API access key",
+          "default": "my-very-secrete-api-key"
+        }
+      }
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Age in years which must be equal to or greater than zero.",
+      "items": { 
+        "type": "string",
+        "default": ["system"]
+       }
+    }
+  },
+
+  "required": [ "id", "runtime", "plugins"]
+}

@@ -1,14 +1,53 @@
-const fs = require('fs')
 const AWS = require('aws-sdk')
-// const aws4  = require('aws4')
+const Ajv = require('ajv')
+const fs = require('fs-extra')
 const { exec } = require('pkg')
+const configSchema = require('./src/schemas/config.json')
+
+const ajv = new Ajv({ 
+  allErrors: true, 
+  removeAdditional: true,
+  useDefaults: process.env.NODE_ENV === 'development' 
+})
+
 const s3 = new AWS.S3({ 
   region: process.env.AWS_REGION || 'eu-central-1' 
 })
 
+
+const cleanup = async () => {
+  console.log('NOTE: Remove previous build artifacts')
+  return fs.remove('/tmp/build')
+}
+
+const prepare = async () => {
+  console.log("NOTE: Copy all files to the tmp directory")
+  // FIXME: Promise.all for faster copy process
+  await fs.copy('src', '/tmp/build/src').then(() => {
+    console.log('*** src is ready')
+  })
+  await fs.copy('node_modules', '/tmp/build/node_modules').then(() => {
+    console.log('*** node_modules are ready')
+  })
+
+  return fs.copy('package.json', '/tmp/build/package.json')
+}
+
+const configure = async (payload) => {
+  console.log("NOTE: Validate", typeof(payload), payload)
+  const config = typeof(payload) === 'string' ? JSON.parse(payload) : payload
+  const valid = ajv.validate(configSchema, config)
+  if (!valid) {
+    throw new Error(ajv.errorsText())
+  }
+
+  console.log('NOTE: Save config in /tmp/build/src/config.json folder', config)
+  fs.writeFileSync('/tmp/build/src/config.json', JSON.stringify(config, null, 2));
+}
+
 const package = async (targetPath) => {
   console.log('NOTE: Package target and copy to path', targetPath)
-  await exec(['./package.json', '--targets', 'node12-macos-x64', '--out-path', targetPath])
+  await exec(['/tmp/build/package.json', '--targets', 'node12-macos-x64', '--out-path', targetPath])
 }
 
 const upload = async (bucketName, agentName, agentFile) => {
@@ -37,6 +76,8 @@ const signUrl = async (bucketName, agentFile) => {
   return url
 }
 
+
+
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
@@ -45,32 +86,45 @@ const headers = {
 }
 
 module.exports.handler = async (event) => {
-  const targetPath = process.env.PKG_TARGET_PATH || './bin'
+  process.env.PKG_TARGET_PATH = '/tmp'
+  process.env.PKG_CACHE_PATH = '/tmp'
+
+  const targetPath = `${(process.env.PKG_TARGET_PATH || './bin')}`
   const agentFile = `${targetPath}/agent`
   const agentName = `agent-${new Date().getTime()}`
   const bucketName = 'vlewin-node-packager'
-  
-  await package(targetPath)
+  const { body } = event
 
-  if (fs.existsSync(agentFile)) {
-    console.log('NOTE: Agent file exists.')
-    await upload(bucketName, agentName, agentFile)
-    const presignedUrl = await signUrl(bucketName, agentName)
+  try {
+    console.log("INFO: Event", JSON.stringify(event))
+    await cleanup()
+    await prepare()
+    await configure(body)
+    await package(targetPath)
+  
+    if (fs.existsSync(agentFile)) {
+      console.log('NOTE: Agent file exists.')
+      await upload(bucketName, agentName, agentFile)
+      const presignedUrl = await signUrl(bucketName, agentName)
+
+      return {
+        statusCode: 200,
+        headers: headers,
+        body: JSON.stringify({ url: presignedUrl })
+      }
+    }
+  } catch (err) {
+    console.log('ERROR', err.message)
 
     return {
-      statusCode: 200,
+      statusCode: 500,
       headers: headers,
-      body: JSON.stringify({ url: presignedUrl })
+      body: JSON.stringify({ message: "Something went wrong!" })
     }
-  }
-
-  return {
-    statusCode: 500,
-    headers: headers,
-    body: JSON.stringify({ message: 'Packaging failed!' })
+  } finally {
+    await cleanup()
   }
 }
 
-
-
-// module.exports.handler()
+// const event = require('./serverless_packager.event.json')
+// module.exports.handler(event)

@@ -1,13 +1,9 @@
 {
-  "id": "uuid",
+  "id": "agent-1",
   "runtime": {
     "interval": 10000,
-    "endpoint": "https://apigateway.de/agents/"
+    "endpoint": "https://my-endpoint.com",
+    "key": "access-key"
   },
-  "plugins": [
-    "battery",
-    "system",
-    "network",
-    "memory"
-  ]
+  "plugins": [ "system", "battery" ]
 }

@@ -4,7 +4,7 @@ const CONFIG = require('./config.json')
 
 module.exports = {
   transform: (results) => {
-    console.log('NOTE: Transform result', results)
+    console.log('PLUGIN: Transform result', results)
     return CONFIG.attributes.reduce((a, e) => {
         a[e] = results[e]
         return a
@@ -12,7 +12,7 @@ module.exports = {
   },
       
   execute: async () => {
-    console.log('NOTE: Collect memory infos')
+    console.log('PLUGIN: Collect memory infos')
     SystemInfo.mem().then((results) => {
       EVENT_HUB.emit('completed', { 
         jobId: 'memory', 
@@ -23,7 +23,7 @@ module.exports = {
 
   schedule: (config) => {
     const interval = config ? config.interval : 20000
-    console.log('INFO: Schedule a memory check in', interval/1000, 'seconds')
+    console.log('PLUGIN: Schedule a memory check in', interval/1000, 'seconds')
     const intervalId = setInterval(() => {
       return module.exports.execute()
     }, interval)

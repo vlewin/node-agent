@@ -9,22 +9,21 @@
   "scripts": {
     "deploy": "sls deploy",
     "deploy:function": "sls deploy -f package",
-    "package": "npx pkg package.json --targets node12-macos-x64 --out-path bin",
-    "package:linux": "npx pkg package.json --targets node12-linux-x64 --out-path bin",
-    "package:windows": "npx pkg package.json --targets node12-win-x64 --out-path bin",
-    "package:all": "npx pkg package.json -t node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path bin"
+    "package": "pkg /tmp/agent/package.json --targets node12-macos-x64 --out-path bin",
+    "package:linux": "pkg package.json --targets node12-linux-x64 --out-path bin",
+    "package:windows": "pkg package.json --targets node12-win-x64 --out-path bin",
+    "package:all": "pkg package.json -t node12-macos-x64,node12-win-x64,node12-linux-x64 --out-path bin"
   },
   "dependencies": {
+    "ajv": "^6.12.4",
     "pkg": "^4.4.9",
     "systeminformation": "^4.27.3"
   },
   "devDependencies": {
-    "aws-sdk": "^2.749.0",
-    "glob": "^7.1.5"
+    "aws-sdk": "^2.749.0"
   },
   "pkg": {
-    "scripts": "./src/plugins/**/*.js",
-    "assets": "./src/plugins/**/*.js",
+    "assets": [ "src/**/*", "package.json" ],
     "targets": [
       "node12"
     ]
