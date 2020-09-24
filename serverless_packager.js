@@ -33,7 +33,18 @@ const prepare = async () => {
   return fs.copy('package.json', '/tmp/build/package.json')
 }
 
-const configure = async (payload) => {
+const configure = async (options) => {
+  console.log("NOTE: Validate", options)
+  const valid = ajv.validate(configSchema, options)
+  if (!valid) {
+    throw new Error(ajv.errorsText())
+  }
+
+  console.log('NOTE: Save config in /tmp/build/src/config.json folder', options)
+  fs.writeFileSync('/tmp/build/src/config.json', JSON.stringify(options, null, 2));
+}
+
+const configurePlugins = async (payload) => {
   console.log("NOTE: Validate", typeof(payload), payload)
   const config = typeof(payload) === 'string' ? JSON.parse(payload) : payload
   const valid = ajv.validate(configSchema, config)
@@ -93,26 +104,27 @@ module.exports.handler = async (event) => {
   const agentFile = `${targetPath}/agent`
   const agentName = `agent-${new Date().getTime()}`
   const bucketName = 'vlewin-node-packager'
-  const { body } = event
+  const config = event.body && typeof(event.body) === 'string' ? JSON.parse(event.body) : event.body || {}
 
   try {
     console.log("INFO: Event", JSON.stringify(event))
+    console.log("config", config)
     await cleanup()
     await prepare()
-    await configure(body)
+    await configure(config)
     await package(targetPath)
   
-    if (fs.existsSync(agentFile)) {
-      console.log('NOTE: Agent file exists.')
-      await upload(bucketName, agentName, agentFile)
-      const presignedUrl = await signUrl(bucketName, agentName)
+    // if (fs.existsSync(agentFile)) {
+    //   console.log('NOTE: Agent file exists.')
+    //   await upload(bucketName, agentName, agentFile)
+    //   const presignedUrl = await signUrl(bucketName, agentName)
 
-      return {
-        statusCode: 200,
-        headers: headers,
-        body: JSON.stringify({ url: presignedUrl })
-      }
-    }
+    //   return {
+    //     statusCode: 200,
+    //     headers: headers,
+    //     body: JSON.stringify({ url: presignedUrl })
+    //   }
+    // }
   } catch (err) {
     console.log('ERROR', err.message)
 
@@ -122,9 +134,42 @@ module.exports.handler = async (event) => {
       body: JSON.stringify({ message: "Something went wrong!" })
     }
   } finally {
-    await cleanup()
+    // await cleanup()
   }
 }
 
 // const event = require('./serverless_packager.event.json')
+let event = {
+  body: {
+    "agent": {
+      "id": "agent-1",
+      "interval": 10000,
+      "endpoint": "https://my-endpoint.com",
+      "key": "access-key"
+    },
+    "plugins": {
+      "system": {
+        "interval": 5000,
+        "path": "@"
+      },
+      "battery": {
+        "interval": 10000,
+        "path": "{ battery: percent, connected: acconnected }"
+      },
+      "memory": {
+        "interval": 15000,
+        "path": "{ total: total, used: used }"
+      },
+      "mqtt": {
+        "path": "{ today: ENERGY.Today, yesterday: ENERGY.Yesterday}",
+        "options": {
+          "host": "192.168.178.50",
+          "topic": "+/tele/SENSOR"
+        }
+      }
+    }    
+  }
+}
+
+// console.log(JSON.stringify(event.body, null, 2))
 // module.exports.handler(event)

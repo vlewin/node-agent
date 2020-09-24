@@ -25,7 +25,7 @@ module.exports = {
     })
   },
 
-  schedule: (config) => {
+  schedule: () => {
     const interval = CONFIG ? CONFIG.interval : 20000
     module.exports.log(`Schedule check in ${interval/1000} seconds`)
 

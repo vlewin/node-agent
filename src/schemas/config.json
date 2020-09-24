@@ -4,15 +4,15 @@
   "title": "Agent config",
   "type": "object",
   "properties": {
-    "id": {
-      "type": "string",
-      "description": "Unique agent identifier e.g. uuid",
-      "default": "test"
-    },
-    "runtime": {
+    "agent": {
       "type": "object",
-      "description": "Agent runtime configuration options",
+      "description": "Agent configuration options",
       "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique agent identifier e.g. uuid",
+          "default": "test"
+        },
         "interval": {
           "type": "number",
           "description": "API sync request frequency in ms",
@@ -28,17 +28,32 @@
           "description": "API access key",
           "default": "my-very-secrete-api-key"
         }
-      }
+      },
+
+      "required": [ "interval", "endpoint", "key"]
     },
+
     "plugins": {
-      "type": "array",
+      "type": "object",
       "description": "Age in years which must be equal to or greater than zero.",
-      "items": { 
-        "type": "string",
-        "default": ["system"]
-       }
+      "properties": {
+        "interval": {
+          "type": "number",
+          "description": "Job update interval in ms",
+          "default": 10000
+        },
+        "path": {
+          "type": "string",
+          "description": "JMespath transform path",
+          "default": "@"
+        },
+        "options": {
+          "type": "object",
+          "description": "Options for push-based plugins e.g MQTT or WebSockets"
+        }
+      }
     }
   },
 
-  "required": [ "id", "runtime", "plugins"]
+  "required": [ "agent", "plugins"]
 }

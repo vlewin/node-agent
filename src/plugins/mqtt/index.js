@@ -1,11 +1,13 @@
 const mqtt = require('mqtt')
 const jmespath = require('jmespath')
-const EVENT_HUB = require('../../event_hub')
-const CONFIG = require('./config.json')
 
+const NAME = 'mqtt'
+const EVENT_HUB = require('../../event_hub')
+const AGENT_CONFIG = require('../../config.json')
+const CONFIG = AGENT_CONFIG.plugins[NAME]
 
 module.exports = {
-  name: 'mqtt',
+  name: NAME,
 
   transform(results) {
     console.log('PLUGIN: Transform result')
@@ -14,15 +16,15 @@ module.exports = {
   
   execute() {
     console.log('Connect to mqtt', CONFIG)
-    const client  = mqtt.connect('mqtt://192.168.178.50')
+    const client  = mqtt.connect(`mqtt://${CONFIG.options.host}`)
 
     if(client.connected) {
       console.log('Client is connected!!!')
     }
  
-    client.on('connect', function () {
+    client.on('connect', () => {
       console.log("Connected")
-      client.subscribe(CONFIG.topic, function (err) {
+      client.subscribe(CONFIG.options.topic, (err) => {
         if (err) {
           console.log('Error on sub')
         } else {
@@ -31,7 +33,7 @@ module.exports = {
       })
     })
      
-    client.on('message', function (topic, message) {
+    client.on('message', (topic, message) => {
       // message is Buffer
       // console.log(topic, message.toString())
       EVENT_HUB.emit('completed', { 

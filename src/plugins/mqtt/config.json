@@ -1,5 +1,7 @@
 {
-    "interval": 60000,
-    "topic": "+/tele/SENSOR",
-    "path": "{ today: ENERGY.Today, yesterday: ENERGY.Yesterday}"
+    "path": "@",
+    "options": {
+      "host": "192.168.178.50", 
+      "topic": "+/tele/SENSOR"
+    }
 }

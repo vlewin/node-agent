@@ -1,5 +1,5 @@
 # agent
-## Example node agent packaged as a binary with plugins support 
+## Example node agent packaged as an executable with plugins support 
 
 ### Setup
 ```bash
@@ -22,8 +22,9 @@ yarn package
 [x] return pre-signed URL with expiration set to X minutes  
 [ ] create a bucket resource with serverless and pass to lambda function  
 [x] allow agent configuration via API  
-[ ] allow plugin configuration via API  
+[x] allow plugin configuration via API  
 [ ] introduce new plugin type e.g. mqtt listener (MQTT2MQTTS bridge)  
-[ ] introduce Websocket plugin (Websocket2MQTTS bridge)  
-[ ] introduce Modbus plugin (Modbus2MQTTS bridge)  
+[ ] introduce Websocket plugin e.g. (Websocket2MQTTS bridge)  
+[ ] introduce Modbus plugin e.g. (Modbus2MQTTS bridge)  
+[ ] introduce Wireless M-Bus plugin e.g. (W-MBus2MQTTS bridge)  
 [ ] create a command line tool with https://github.com/oclif/oclif and package it as a binary

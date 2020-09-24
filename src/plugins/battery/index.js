@@ -1,10 +1,13 @@
 const SystemInfo = require('systeminformation')
 const jmespath = require('jmespath')
+
+const NAME = 'battery'
 const EVENT_HUB = require('../../event_hub')
-const CONFIG = require('./config.json')
+const AGENT_CONFIG = require('../../config.json')
+const CONFIG = AGENT_CONFIG.plugins[NAME]
 
 module.exports = {
-  name: 'battery',
+  name: NAME,
 
   transform(results) {
     console.log('PLUGIN: Transform result')
@@ -21,8 +24,8 @@ module.exports = {
     })
   },
 
-  schedule: (config) => {
-    const interval = config ? config.interval : 20000
+  schedule: () => {
+    const interval = CONFIG ? CONFIG.interval : 20000
     console.log('PLUGIN: Schedule a battery check in', interval/1000, 'seconds')
     const intervalId = setInterval(() => {
       return module.exports.execute()

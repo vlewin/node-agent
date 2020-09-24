@@ -3,26 +3,25 @@ console.log('Start agent')
 const path = require('path')
 const MODULES_PATH = path.join(__dirname, 'plugins')
 const EVENT_HUB = require('./event_hub')
-// const fs = require('fs')
 
-
-// fs.readdir(__dirname, function (err, files) {
-//   //handling error
-//   if (err) {
-//       return console.log('Unable to scan directory: ' + err);
-//   } 
-//   //listing all files using forEach
-//   files.forEach(function (file) {
-//       // Do whatever you want to do with the file
-//       console.log(file); 
-//   });
-// });
+const fs = require('fs')
+fs.readdir(__dirname, function (err, files) {
+  //handling error
+  if (err) {
+      return console.log('Unable to scan directory: ' + err);
+  } 
+  //listing all files using forEach
+  files.forEach(function (file) {
+      // Do whatever you want to do with the file
+      console.log(file); 
+  });
+});
 
 const CONFIG = require('./config.json')
-const SYNC_INTERVAL = CONFIG.runtime.interval
+const SYNC_INTERVAL = CONFIG.agent.interval
 
 
-CONFIG.plugins.forEach((name) => {
+Object.keys(CONFIG.plugins).forEach((name) => {
   const file = path.join(__dirname, './plugins/', name)
   module.exports[name] = require(file)
   console.log('*** Found module:', name, 'in file:', file)

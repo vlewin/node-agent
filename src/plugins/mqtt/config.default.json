@@ -1,0 +1,5 @@
+{
+    "host": "<HOSTNAME OR IP ADDRESS>", 
+    "topic": "<TOPIC or wildcard e.g. #>",
+    "path": "<PATH or @ for object or * for array>"
+}

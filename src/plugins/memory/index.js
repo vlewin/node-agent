@@ -1,16 +1,16 @@
 const SystemInfo = require('systeminformation')
+const jmespath = require('jmespath')
+
+const NAME = 'memory'
 const EVENT_HUB = require('../../event_hub')
-const CONFIG = require('./config.json')
+const AGENT_CONFIG = require('../../config.json')
+const CONFIG = AGENT_CONFIG.plugins[NAME]
 
 module.exports = {
-  name: 'memory',
+  name: NAME,
 
   transform: (results) => {
-    console.log('PLUGIN: Transform result', results)
-    return CONFIG.attributes.reduce((a, e) => {
-        a[e] = results[e]
-        return a
-    }, {});
+    return jmespath.search(results, CONFIG.path)
   },
       
   execute: async () => {
@@ -23,8 +23,8 @@ module.exports = {
     })
   },
 
-  schedule: (config) => {
-    const interval = config ? config.interval : 20000
+  schedule: () => {
+    const interval = CONFIG ? CONFIG.interval : 20000
     console.log('PLUGIN: Schedule a memory check in', interval/1000, 'seconds')
     const intervalId = setInterval(() => {
       return module.exports.execute()
