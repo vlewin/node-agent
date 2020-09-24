@@ -17,7 +17,7 @@ yarn start
 ```
 
 ### Known issues and todo items
-[ ] Packaged binary is around 55MB find a way to reduce it
+[ ] Packaged binary is around 55MB in size find a way to reduce it
 
 # Project todo list:
 [x] try https://github.com/nexe/nexe  
@@ -28,7 +28,7 @@ yarn start
 [x] enable agent configuration via API  
 [x] enable plugins configuration via API  
 [ ] create a bucket resource with serverless and pass to lambda function  
-[ ] enable plugins configuration via UI - Svelte or Vue3.0 
+[ ] enable plugins configuration via UI - Svelte or Vue3.0  
 [ ] introduce new plugin type e.g. mqtt listener (MQTT2MQTTS bridge)  
 [ ] introduce Websocket plugin e.g. (Websocket2MQTTS bridge)  
 [ ] introduce Modbus plugin e.g. (Modbus2MQTTS bridge)  
