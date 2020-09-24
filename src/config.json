@@ -5,5 +5,9 @@
     "endpoint": "https://my-endpoint.com",
     "key": "access-key"
   },
-  "plugins": [ "system", "battery" ]
+  "plugins": [ 
+    "mqtt",
+    "battery",
+    "system"
+  ]
 }

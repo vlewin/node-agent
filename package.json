@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "ajv": "^6.12.4",
+    "jmespath": "^0.15.0",
+    "mqtt": "^4.2.1",
     "pkg": "^4.4.9",
     "systeminformation": "^4.27.3"
   },
@@ -23,7 +25,10 @@
     "aws-sdk": "^2.749.0"
   },
   "pkg": {
-    "assets": [ "src/**/*", "package.json" ],
+    "assets": [
+      "src/**/*",
+      "package.json"
+    ],
     "targets": [
       "node12"
     ]

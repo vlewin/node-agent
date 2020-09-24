@@ -1,8 +1,4 @@
 {
     "interval": 5000,
-    "attributes": [
-        "uuid",
-        "manufacturer",
-        "model"
-    ]
+    "path": "{ id: uuid, model: model }"
 }

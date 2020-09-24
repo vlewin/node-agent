@@ -32,19 +32,24 @@ console.log('*** Loaded modules', Object.keys(module.exports))
 // FIXME: Use in memory cache with TTL
 // https://www.npmjs.com/package/node-cache
 
-const main = async () => {
+const main = () => {
   const buffer = {}
 
   EVENT_HUB.on('completed', (stream) => {
     console.log('MAIN:', stream.jobId, 'job completed!');
+    console.log(stream.results)
     buffer[stream.jobId] = stream.results
   });
 
   console.log('MAIN: Schedule the jobs')
-  Object.values(module.exports).map((module) => module).map(r => r.schedule())
+  console.log('module.exports', module.exports)
+  Object.values(module.exports).forEach((module) => {
+    console.log('Schedule job for', module.name)
+    module.schedule()
+  })
 
   console.log('MAIN: Data sync check every', SYNC_INTERVAL/1000, 'seconds')
-  setInterval(async () => {
+  setInterval(() => {
     if(Object.keys(buffer).length) {
       console.log('MAIN: Send to API endpoint')
       console.log('MAIN: Buffer', buffer)

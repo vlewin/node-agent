@@ -1,5 +1,6 @@
 {
     "interval": 60000,
+    "path": "{ battery: percent, connected: acconnected }",
     "attributes": [
         "percent",
         "timeremaining",

@@ -1,18 +1,22 @@
 const SystemInfo = require('systeminformation')
 const EVENT_HUB = require('../../event_hub')
 const CONFIG = require('./config.json')
+const jmespath = require('jmespath')
 
 module.exports = {
+  name: 'system',
+
+  log(message) {
+    console.log(`>>> ${module.exports.name}: ${message}`)
+  },
+  
   transform: (results) => {
-    console.log('PLUGIN: Transform result')
-    return CONFIG.attributes.reduce((a, e) => {
-      a[e] = results[e]
-      return a
-    }, {});
+    return jmespath.search(results, CONFIG.path)
   },
 
-  execute: async () => {
-    console.log('PLUGIN: Collect system infos')
+  execute: () => {
+    module.exports.log('Collect system infos')
+
     SystemInfo.system().then((results) => {
       EVENT_HUB.emit('completed', { 
         jobId: 'system', 
@@ -23,7 +27,8 @@ module.exports = {
 
   schedule: (config) => {
     const interval = CONFIG ? CONFIG.interval : 20000
-    console.log('PLUGIN: Schedule a system check in', interval/1000, 'seconds')
+    module.exports.log(`Schedule check in ${interval/1000} seconds`)
+
     const intervalId = setInterval(() => {
       return module.exports.execute()
     }, interval)

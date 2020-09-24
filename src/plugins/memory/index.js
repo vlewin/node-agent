@@ -3,6 +3,8 @@ const EVENT_HUB = require('../../event_hub')
 const CONFIG = require('./config.json')
 
 module.exports = {
+  name: 'memory',
+
   transform: (results) => {
     console.log('PLUGIN: Transform result', results)
     return CONFIG.attributes.reduce((a, e) => {
