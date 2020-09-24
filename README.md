@@ -29,6 +29,8 @@ yarn start
 [x] enable plugins configuration via API  
 [ ] create a bucket resource with serverless and pass to lambda function  
 [ ] enable plugins configuration via UI - Svelte or Vue3.0  
+[ ] push data to the configurable HTTPS endpoint
+[ ] push data using MQTTS to AWS IoT Core  
 [ ] introduce new plugin type e.g. mqtt listener (MQTT2MQTTS bridge)  
 [ ] introduce Websocket plugin e.g. (Websocket2MQTTS bridge)  
 [ ] introduce Modbus plugin e.g. (Modbus2MQTTS bridge)  
