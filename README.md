@@ -17,12 +17,13 @@ yarn package
 # Project todo list:
 [x] try https://github.com/nexe/nexe  
 [x] try https://github.com/vercel/ncc   
-[x] enable packaging in lambda function  
-[x] upload to S3 bucket  
-[x] return pre-signed URL with expiration set to X minutes  
+[x] enable packaging in the AWS Lambda function  
+[x] enable upload to S3 bucket  
+[x] generate pre-signed URL with expiration set to X minutes  
+[x] enable agent configuration via API  
+[x] enable plugins configuration via API  
 [ ] create a bucket resource with serverless and pass to lambda function  
-[x] allow agent configuration via API  
-[x] allow plugin configuration via API  
+[ ] enable plugins configuration via UI - Svelte or Vue3.0 
 [ ] introduce new plugin type e.g. mqtt listener (MQTT2MQTTS bridge)  
 [ ] introduce Websocket plugin e.g. (Websocket2MQTTS bridge)  
 [ ] introduce Modbus plugin e.g. (Modbus2MQTTS bridge)  
