@@ -1,14 +1,19 @@
 # agent
 ## Example node agent packaged as an executable with plugins support 
 
-### Setup
+### Install development dependencies
+```bash
+yarn
+```
+
+### Package agent
 ```bash
 yarn package
 ```
 
-### Packaging
+### Start the agent
 ```bash
-yarn package
+yarn start
 ```
 
 ### Known issues and todo items
