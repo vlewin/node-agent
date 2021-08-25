@@ -27,7 +27,8 @@ yarn start
 [x] generate pre-signed URL with expiration set to X minutes  
 [x] enable agent configuration via API  
 [x] enable plugins configuration via API  
-[ ] create a bucket resource with serverless and pass to lambda function  
+[x] create a bucket resource with serverless and pass to lambda function  
+[ ] sync config with a server via Sync API
 [ ] enable plugins configuration via UI - Svelte or Vue3.0  
 [ ] push data to the configurable HTTPS endpoint
 [ ] push data using MQTTS to AWS IoT Core  

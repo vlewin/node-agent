@@ -9,7 +9,12 @@
   "scripts": {
     "deploy": "sls deploy",
     "deploy:function": "sls deploy -f package",
-    "start": "/tmp/agent",
+    "setup": "cp com.node.agent.plist ~/Library/LaunchAgents/ && yarn start",
+    "start": "launchctl load ~/Library/LaunchAgents/com.node.agent.plist && launchctl list | grep node",
+    "stop": "launchctl unload ~/Library/LaunchAgents/com.node.agent.plist",
+    "status": "launchctl list | grep node",
+    "restart": "yarn stop && yarn start",
+    "logs": "tail -f /tmp/com.node.agent.*",
     "package": "pkg package.json --targets node12-macos-x64 --out-path /tmp",
     "package:linux": "pkg package.json --targets node12-linux-x64 --out-path bin",
     "package:windows": "pkg package.json --targets node12-win-x64 --out-path bin",
@@ -17,13 +22,15 @@
   },
   "dependencies": {
     "ajv": "^6.12.4",
+    "dotenv": "^8.2.0",
     "jmespath": "^0.15.0",
     "mqtt": "^4.2.1",
     "pkg": "^4.4.9",
     "systeminformation": "^4.27.3"
   },
   "devDependencies": {
-    "aws-sdk": "^2.749.0"
+    "aws-sdk": "^2.749.0",
+    "serverless-export-env": "arabold/serverless-export-env"
   },
   "pkg": {
     "assets": [

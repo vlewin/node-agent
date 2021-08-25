@@ -11,34 +11,50 @@ provider:
       Action:
         - s3:GetObject
         - s3:PutObject
-      Resource: arn:aws:s3:::vlewin-node-packager/*
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: AgentsBucket
+            - '/*'
 
   environment:
     PKG_CACHE_PATH: /tmp
     PKG_TARGET_PATH: /tmp
+    BUCKET_NAME: ${self:custom.bucket}
+    REGION: ${self:provider.region}
+
+custom:
+  bucket: "${self:service}-${self:provider.stage}"
 
 functions:
   package:
-    handler: serverless_packager.handler
+    handler: handler.package
     # events:
     #   - http:
     #       path: package
     #       method: get
     #       cors: true
 
-# FIXME: Create a bucket for executables
-# resources:
-#   Outputs:
-#     Test:
-#       test-output
-#     ServiceEndpoint:
-#       Description: API Gateway endpoint
-#       Value:
-#         Fn::Join:
-#           - ""
-#           - - "https://"
-#             - "Ref": "ApiGatewayRestApi"
-#             - ".execute-api.eu-west-1.amazonaws.com/dev"
+resources:
+  - ${file(resources/bucket.yml)}
+  - Outputs:
+      AgentsBucketName:
+        Value:
+          Ref: AgentsBucket
+
+    # ServiceEndpoint:
+    #   Description: API Gateway endpoint
+    #   Value:
+    #     Fn::Join:
+    #       - ""
+    #       - - "https://"
+    #         - "Ref": "ApiGatewayRestApi"
+    #         - ".execute-api.eu-west-1.amazonaws.com/dev"
+
+
+plugins:
+  - serverless-export-env
 
 # plugins:
 #   - serverless-stack-output

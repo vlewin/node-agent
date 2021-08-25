@@ -3,3 +3,5 @@ node_modules/
 src/certs/*
 !src/certs/.gitkeep
 .DS_Store
+.serverless
+.env
