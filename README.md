@@ -28,9 +28,9 @@ yarn start
 [x] enable agent configuration via API  
 [x] enable plugins configuration via API  
 [x] create a bucket resource with serverless and pass to lambda function  
-[ ] sync config with a server via Sync API
+[ ] sync config with a server via Sync API  
 [ ] enable plugins configuration via UI - Svelte or Vue3.0  
-[ ] push data to the configurable HTTPS endpoint
+[ ] push data to the configurable HTTPS endpoint  
 [ ] push data using MQTTS to AWS IoT Core  
 [ ] introduce new plugin type e.g. mqtt listener (MQTT2MQTTS bridge)  
 [ ] introduce Websocket plugin e.g. (Websocket2MQTTS bridge)  
